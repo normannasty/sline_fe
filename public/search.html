@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Saniterline Intranet</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .result-item {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .key-value {
+            padding: 10px;
+            border-bottom: 1px solid #f8f8f8;
+        }
+        .key-value:last-child {
+            border-bottom: none;
+        }
+    </style>
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Saniterline Intranet</a>
+        </div>
+    </nav>
+
+    <main role="main" class="container mt-4">
+        <div class="jumbotron">
+            <h1>Termék keresés</h1>
+            <form>
+                <div class="form-group">
+                    <label for="tableDropdown">Válassz Gyártót:</label>
+                    <select class="form-control" id="tableDropdown">
+                        <!-- Dropdown options will be populated here -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="searchInput">Add mega a gyári kódot:</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Írd be a gyári kódot">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Keresés</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">Minden jog fenntartva!</span>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('http://localhost:8080/tables')
+                .then(response => response.json())
+                .then(data => populateDropdown(data))
+                .catch(error => console.error('Error:', error));
+        });
+    
+        function populateDropdown(data) {
+            const dropdown = document.getElementById('tableDropdown');
+            data.forEach(item => {
+                let option = document.createElement('option');
+                option.value = item; // Assuming the endpoint returns an array of strings
+                option.textContent = item;
+                dropdown.appendChild(option);
+            });
+        }
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevents the default form submission action
+
+        const selectedTable = document.getElementById('tableDropdown').value;
+        const searchQuery = document.getElementById('searchInput').value;
+
+        // Construct the URL with query parameters
+        const url = new URL('http://localhost:8080/search');
+        url.searchParams.append('tableName', selectedTable);
+        url.searchParams.append('searchValue', searchQuery);
+
+        // Fetch request to your search endpoint
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            displayResults(data); // Function to display the results
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    function displayResults(data) {
+    // Clear previous results
+    const existingResults = document.getElementById('resultsContainer');
+    if (existingResults) {
+        existingResults.remove();
+    }
+
+    // Create a container for the results
+    const resultsContainer = document.createElement('div');
+    resultsContainer.id = 'resultsContainer';
+    resultsContainer.className = 'container';
+
+    // Iterate over each item in the data array
+    data.forEach(item => {
+        const itemContainer = document.createElement('div');
+        itemContainer.className = 'result-item card';
+
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card-body';
+
+        // Iterate over each key-value pair in the item
+        for (const key in item) {
+            if (item.hasOwnProperty(key)) {
+                const keyValueDiv = document.createElement('div');
+                keyValueDiv.className = 'key-value';
+                keyValueDiv.textContent = key + ': ' + item[key];
+                cardBody.appendChild(keyValueDiv);
+            }
+        }
+
+        itemContainer.appendChild(cardBody);
+        resultsContainer.appendChild(itemContainer);
+    });
+
+    // Append the results container to the body
+    document.body.appendChild(resultsContainer);
+}
+
+    </script>
+
+
+</body>
+</html>
