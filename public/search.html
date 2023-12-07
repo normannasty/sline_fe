@@ -26,13 +26,21 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Saniterline Intranet</a>
+        <a class="navbar-brand" href="index.html">
+          <img
+            src="https://www.szaniteronline.hu/!common_design/custom/retinas.unas.hu/element/layout_hu_header_logo-200x50_2_default.png?time=1699801414"
+            alt="Saniterline Logo"
+            height="50"
+          />
+          Intranet
+        </a>
       </div>
     </nav>
 
     <main role="main" class="container mt-4">
       <div class="jumbotron">
-        <h1>Termék keresés</h1>
+        <h2>Termék keresés</h2>
+
         <form>
           <div class="form-group">
             <label for="tableDropdown">Válassz Gyártót:</label>
@@ -42,12 +50,14 @@
           </div>
 
           <div class="form-group">
-            <label for="searchInput">Add mega a gyári kódot:</label>
+            <label for="searchInput">Add meg a gyári kódot:</label>
             <input
               type="text"
               class="form-control"
               id="searchInput"
               placeholder="Írd be a gyári kódot"
+              minlength="5"
+              required
             />
           </div>
 
@@ -66,95 +76,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        fetch("http://localhost:8080/tables")
-          .then((response) => response.json())
-          .then((data) => populateDropdown(data))
-          .catch((error) => console.error("Error:", error));
-      });
-
-      function populateDropdown(data) {
-        const dropdown = document.getElementById("tableDropdown");
-        data.forEach((item) => {
-          let option = document.createElement("option");
-          option.value = item; // Assuming the endpoint returns an array of strings
-          option.textContent = item;
-          dropdown.appendChild(option);
-        });
-      }
-
-      document
-        .querySelector("form")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // Prevents the default form submission action
-
-          const selectedTable = document.getElementById("tableDropdown").value;
-          const searchQuery = document.getElementById("searchInput").value;
-
-          // Construct the URL with query parameters
-          const url = new URL("http://localhost:8080/search");
-          url.searchParams.append("tableName", selectedTable);
-          url.searchParams.append("searchValue", searchQuery);
-
-          // Fetch request to your search endpoint
-          fetch(url)
-            .then((response) => response.json())
-            .then((data) => {
-              displayResults(data); // Function to display the results
-            })
-            .catch((error) => console.error("Error:", error));
-        });
-
-      function displayResults(data) {
-        // Clear previous results
-        const existingResults = document.getElementById("resultsContainer");
-        if (existingResults) {
-          existingResults.remove();
-        }
-
-        // Create a container for the results
-        const resultsContainer = document.createElement("div");
-        resultsContainer.id = "resultsContainer";
-        resultsContainer.className = "container mt-4";
-
-        // Create a table element
-        const table = document.createElement("table");
-        table.className = "table table-striped";
-
-        // Create the header row
-        const thead = document.createElement("thead");
-        const headerRow = document.createElement("tr");
-        if (data.length > 0) {
-          Object.keys(data[0]).forEach((key) => {
-            const th = document.createElement("th");
-            th.textContent = key;
-            headerRow.appendChild(th);
-          });
-          thead.appendChild(headerRow);
-          table.appendChild(thead);
-        }
-
-        // Create the body of the table
-        const tbody = document.createElement("tbody");
-        data.forEach((item) => {
-          const row = document.createElement("tr");
-          Object.keys(item).forEach((key) => {
-            const td = document.createElement("td");
-            td.textContent = item[key];
-            row.appendChild(td);
-          });
-          tbody.appendChild(row);
-        });
-        table.appendChild(tbody);
-
-        // Append the table to the results container
-        resultsContainer.appendChild(table);
-
-        // Append the results container to the main element
-        const mainElement = document.querySelector("main");
-        mainElement.appendChild(resultsContainer);
-      }
-    </script>
+    <script type="module" src="main.js"></script>
   </body>
 </html>
