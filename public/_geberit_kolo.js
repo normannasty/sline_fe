@@ -12,17 +12,17 @@ style.innerHTML = `
 }`;
 document.head.appendChild(style);
 
-export function displayVilleroyResults(data, container) {
+export function displayGeberitKoloResults(data, container) {
   const displayKeys = {
     _cikk: "Termék kód",
     listaar: "HU Listaár",
-    svb: "SVB ár",
     kucza: "Kucza ár",
+    farszer: "Farszer ár",
     sp: "SP ár",
     cu: "CU ár",
     sp_keszlet: "SP Készlet",
     cu_keszlet: "CU Készlet",
-    kucza_keszlet: "Kucza Készlet",
+    kucza_keszlet: "Farszer Készlet",
   };
 
   const table = document.createElement("table");
@@ -47,11 +47,7 @@ export function displayVilleroyResults(data, container) {
     // Extract and compare prices, considering null or undefined values
     // Initialize prices object with null for non-existent or "N/A" values
     const prices = {
-      svb: item.svb && item.svb !== "N/A" ? parseFloat(item.svb) : null,
-      kucza:
-        item.kucza && item.kucza !== "N/A"
-          ? parseFloat(item.kucza)
-          : null,
+      kucza: item.kucza && item.kucza !== "N/A" ? parseFloat(item.kucza) : null,
       sp: item.sp && item.sp !== "N/A" ? parseFloat(item.sp) : null,
       cu: item.cu && item.cu !== "N/A" ? parseFloat(item.cu) : null,
     };

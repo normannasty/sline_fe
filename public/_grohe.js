@@ -12,14 +12,15 @@ style.innerHTML = `
 }`;
 document.head.appendChild(style);
 
-export function displayVilleroyResults(data, container) {
+export function displayGroheResults(data, container) {
   const displayKeys = {
     _cikk: "Termék kód",
-    listaar: "HU Listaár",
-    svb: "SVB ár",
-    kucza: "Kucza ár",
+    industry_price_wo_vat__eur: "Industry Price WO VAT EUR",
+    rustic: "Rustic ár",
+    aq_qf: "Aq_QF ár",
     sp: "SP ár",
     cu: "CU ár",
+    kucza: "Kucza ár",
     sp_keszlet: "SP Készlet",
     cu_keszlet: "CU Készlet",
     kucza_keszlet: "Kucza Készlet",
@@ -47,11 +48,7 @@ export function displayVilleroyResults(data, container) {
     // Extract and compare prices, considering null or undefined values
     // Initialize prices object with null for non-existent or "N/A" values
     const prices = {
-      svb: item.svb && item.svb !== "N/A" ? parseFloat(item.svb) : null,
-      kucza:
-        item.kucza && item.kucza !== "N/A"
-          ? parseFloat(item.kucza)
-          : null,
+      kucza: item.kucza && item.kucza !== "N/A" ? parseFloat(item.kucza) : null,
       sp: item.sp && item.sp !== "N/A" ? parseFloat(item.sp) : null,
       cu: item.cu && item.cu !== "N/A" ? parseFloat(item.cu) : null,
     };

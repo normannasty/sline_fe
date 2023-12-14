@@ -12,16 +12,15 @@ style.innerHTML = `
 }`;
 document.head.appendChild(style);
 
-export function displayVilleroyResults(data, container) {
+export function displayKeucoResults(data, container) {
   const displayKeys = {
     _cikk: "Termék kód",
-    listaar: "HU Listaár",
+    kde221: "Kde221",
+    huf_netto_ft_os_listaar: "HU Listaár",
     svb: "SVB ár",
     kucza: "Kucza ár",
     sp: "SP ár",
-    cu: "CU ár",
-    sp_keszlet: "SP Készlet",
-    cu_keszlet: "CU Készlet",
+    sp_keszlet: "CU Készlet",
     kucza_keszlet: "Kucza Készlet",
   };
 
@@ -48,12 +47,8 @@ export function displayVilleroyResults(data, container) {
     // Initialize prices object with null for non-existent or "N/A" values
     const prices = {
       svb: item.svb && item.svb !== "N/A" ? parseFloat(item.svb) : null,
-      kucza:
-        item.kucza && item.kucza !== "N/A"
-          ? parseFloat(item.kucza)
-          : null,
+      kucza: item.kucza && item.kucza !== "N/A" ? parseFloat(item.kucza) : null,
       sp: item.sp && item.sp !== "N/A" ? parseFloat(item.sp) : null,
-      cu: item.cu && item.cu !== "N/A" ? parseFloat(item.cu) : null,
     };
 
     // Create a map to store the ranking of each price

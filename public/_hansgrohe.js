@@ -1,3 +1,17 @@
+// Dynamically create and insert CSS for background blinking effect
+const style = document.createElement("style");
+style.type = "text/css";
+style.innerHTML = `
+@keyframes blinkBackground {
+  0% { background-color: rgb(102, 204, 0); }
+  50% { background-color: transparent; }
+  100% { background-color: rgb(102, 204, 0); }
+}
+.blink-background {
+  animation: blinkBackground 1s linear infinite;
+}`;
+document.head.appendChild(style);
+
 export function displayHansgroheResults(data, container) {
   const displayKeys = {
     _cikk: "Termék kód",
@@ -69,7 +83,7 @@ export function displayHansgroheResults(data, container) {
             Object.keys(priceRanking).indexOf(String(priceValue)) + 1;
 
           if (rank === 1) {
-            td.style.backgroundColor = "rgb(102,204,0)"; // Green for lowest price
+            td.classList.add("blink-background");
           } else if (rank === 2) {
             td.style.backgroundColor = "rgb(51,153,255)"; // Blue for second lowest
           } else if (rank === 3) {

@@ -1,9 +1,17 @@
 import { displayHansgroheResults } from "./_hansgrohe.js";
 import { displayDuravitResults } from "./_duravit.js";
 import { displayVilleroyResults } from "./_villeroy.js";
+import { displayGeberitKoloResults } from "./_geberit_kolo.js";
+import { displayGroheResults } from "./_grohe.js";
+import { displayKeucoResults } from "./_keuco.js";
+import { displayKludiResults } from "./_kludi.js";
+
+
+
+import { config } from './config.js';
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://localhost:8080/tables")
+  fetch(`${config.serverUrl}:${config.port}/tables`)
     .then((response) => response.json())
     .then((data) => populateDropdown(data))
     .catch((error) => console.error("Error:", error));
@@ -36,8 +44,20 @@ function displayResults(data, selectedTable) {
     case "duravit":
       displayDuravitResults(data, resultsContainer);
       break;
-    case "villeroy":
+    case "villeroy_alfoldi":
       displayVilleroyResults(data, resultsContainer);
+      break;
+    case "geberit_kolo":
+        displayGeberitKoloResults(data, resultsContainer);
+      break;
+    case "grohe":
+          displayGroheResults(data, resultsContainer);
+      break;
+    case "keuco":
+          displayKeucoResults(data, resultsContainer);
+      break;
+    case "kludi_blanco_sch_deant":
+          displayKludiResults(data, resultsContainer);
       break;
     // Add more cases as needed
   }
@@ -52,7 +72,7 @@ document.querySelector("form").addEventListener("submit", function (event) {
   const searchQuery = document.getElementById("searchInput").value;
 
   fetch(
-    `http://localhost:8080/search?tableName=${selectedTable}&searchValue=${searchQuery}`
+    `${config.serverUrl}:${config.port}/search?tableName=${selectedTable}&searchValue=${searchQuery}`
   )
     .then((response) => response.json())
     .then((data) => {
